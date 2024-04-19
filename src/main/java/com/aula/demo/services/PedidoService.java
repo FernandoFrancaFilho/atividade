@@ -1,37 +1,43 @@
 package com.aula.demo.services;
 
+import com.aula.demo.models.Pedido;
+import com.aula.demo.models.Produto;
+import com.aula.demo.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.aula.demo.Pedido;
 import com.aula.demo.dtos.PedidoDto;
 import com.aula.demo.enums.StatusPedido;
 import com.aula.demo.repositories.PedidoRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 @Service
 public class PedidoService {
-    
+
     private final PedidoRepository pedidoRepository;
+    private final ProdutoRepository produtoRepository;
 
     @Autowired
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, ProdutoRepository produtoRepository) {
         this.pedidoRepository = pedidoRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     public Page<PedidoDto> findAll(Pageable pagination) {
-        return pedidoRepository.findAll(pagination).map(pedido -> new PedidoDto(pedido));
+        return pedidoRepository.findAll(pagination).map(PedidoDto::new);
     }
-    
+
     public PedidoDto findById(long id) {
-    	return PedidoRepository.getReferenceById(id);
+
+
+        return new PedidoDto(pedidoRepository.getReferenceById(id));
     }
-    
-    @Autowired
-    private ProdutoRepository produtoRepository;
+
 
     public Pedido adicionarProdutosAoPedido(Long pedidoId, List<Long> produtosIds) {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
@@ -48,32 +54,32 @@ public class PedidoService {
 
         return pedidoRepository.save(pedido);
     }
-}
-    
+
     @Transactional
     public PedidoDto save(PedidoDto pedidoDto) {
-    	Pedido pedido = Pedido.fromDto(pedidoDto);
-    	Pedido pedidoSalvo = PedidoRepository.save(pedido);
-    	pedidoSalvo.setStatus(StatusPedido.CRIADO);
-    	return new PedidoDto(pedidoSalvo);
-}
-    
+        Pedido pedido = Pedido.fromDto(pedidoDto);
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+        pedidoSalvo.setStatus(StatusPedido.CRIADO);
+        return new PedidoDto(pedidoSalvo);
+    }
+
     @Transactional
-    public PedidoDto update(lond id, PedidoDto pedidoDto) {
-    	Pedido pedido = com.aula.demo.models.Pedido.fromDto(pedidoDto);
-    	Pedido.setId(id);
-    	Pedido pedidosaved = pedidoRepository.save(pedido);
-    	return new PedidoDto(pedidosaved);
+    public PedidoDto update(long id, PedidoDto pedidoDto) {
+        Pedido pedido = Pedido.fromDto(pedidoDto);
+        pedido.setId(id);
+        Pedido pedidosaved = pedidoRepository.save(pedido);
+        return new PedidoDto(pedidosaved);
     }
-    
+
     public void delete(long id) {
-    	pedidoRepository.deleteById(id);
+        pedidoRepository.deleteById(id);
     }
+
     @Transactional
     public String atualizarStatus(long id, PedidoDto pedidoDto) {
-    	com.aula.demo.models.Pedido pedido = com.aula.demo.models.Pedido.fromDto(pedidoDto);
-    	pedido.setStatus(pedidoDto.status());
-    	pedidoRepository.save(pedido);
-    	return "Pedido Atualizado com Sucesso";
+        com.aula.demo.models.Pedido pedido = com.aula.demo.models.Pedido.fromDto(pedidoDto);
+        pedido.setStatus(pedidoDto.status());
+        pedidoRepository.save(pedido);
+        return "Pedido Atualizado com Sucesso";
     }
 }

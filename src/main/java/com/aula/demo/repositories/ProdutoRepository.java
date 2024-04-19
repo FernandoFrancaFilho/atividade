@@ -1,11 +1,9 @@
 package com.aula.demo.repositories;
 
-import com.aula.demo.models.Pedido;
+import com.aula.demo.models.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-
+public interface ProdutoRepository  extends JpaRepository<Produto,Long> {
 }
-

@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: proj-atividade
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/proj-atividade-db?createDatabaseIfNotExist=true
+    password: Housegunz123!
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+springdoc:
+  api-docs:
+    path: "/api-docs"

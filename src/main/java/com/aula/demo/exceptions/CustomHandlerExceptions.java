@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
-public class CustomHandlerException {
+public class CustomHandlerExceptions {
 
 	@ExceptionHandler({EntityNotFoundException.class})
 	public ResponseEntity<?> notFound(){

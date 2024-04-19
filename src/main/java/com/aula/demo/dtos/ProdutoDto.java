@@ -1,6 +1,6 @@
 package com.aula.demo.dtos;
 
-import com.aula.demo.Produto;
+import com.aula.demo.models.Produto;
 
 public record ProdutoDto(long id, String nome, int quantidade, String descricao, float preco ) {
 	public ProdutoDto(Produto produto) {

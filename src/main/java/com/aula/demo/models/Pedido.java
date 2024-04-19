@@ -31,6 +31,14 @@ public class Pedido {
 	@ManyToOne
 	private Produto produto;
 
+	public Pedido() {}
+
+	public Pedido(LocalDate datapedido, String endereco, StatusPedido status) {
+		this.dataPedido = datapedido;
+		this.endereco = endereco;
+		this.status = status;
+	}
+
 	public long getId() {
 		return id;
 	}
